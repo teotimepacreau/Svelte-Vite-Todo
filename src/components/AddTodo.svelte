@@ -1,13 +1,23 @@
-<form>
+<script>
+  //PSEUDO CODE : au clic sur le bouton submit, ce qui est entré dans l'input s'ajoute à la liste
+  import {createEventDispatcher} from 'svelte'
+  const dispatch = createEventDispatcher()
 
-  <input
-    on
+  let text
+  const handleAddTodoItemToList = ()=>{
+    dispatch('add-todo-item', text)
+  }
+
+</script>
+
+<form>
+  <input bind:value = {text}
     id="new-todo"
     class="new-todo"
     placeholder="What needs to be done?"
     type="text"
   />
-  <button type="submit">Add</button>
+  <button on:click|preventDefault={handleAddTodoItemToList} type="submit">Add</button>
 </form>
 
 <style>

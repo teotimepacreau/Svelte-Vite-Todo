@@ -66,9 +66,3 @@ button {
   visibility: hidden;
 }
 
-:focus,
-.toggle:focus + label,
-.toggle-all:focus + label {
-  box-shadow: 0 0 2px 2px var(--color-highlight);
-  outline: 0;
-}
