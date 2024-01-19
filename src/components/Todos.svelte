@@ -2,16 +2,22 @@
   import AddTodo from "./AddTodo.svelte";
 
   import Todo from "./Todo.svelte";
-  // state
-  let todos = [
+
+  import TodosLeft from './TodosLeft.svelte'
+
+  import Filters from "./Filters.svelte";
+
+  import Clear from "./Clear.svelte";
+
+  // STATE
+  export let todos = [
     { id: "1e4a59703af84", text: "Todo 1", completed: true },
     { id: "9e09bcd7b9349", text: "Todo 2", completed: false },
     { id: "9e4273a51a37c", text: "Todo 3", completed: false },
     { id: "53ae48bf605cc", text: "Todo 4", completed: false },
   ];
 
-  $: todosAmount = todos.length;
-
+  // FUNCTIONS
   function generateRandomId() {
     return Math.random().toString(16).slice(2);
   }
@@ -42,6 +48,34 @@
   todos = todos.filter((item)=>{
     return item.id !== id
   })
+
+  // compter le nombre de tâche qu'il reste à compléter
+  $: numbersOfTodosLeft = todos.filter((element) => {
+        return element.completed === false
+    }).length;
+
+  // avoir par défaut toutes les tâches qui s'affichent
+ let selectedFilter = 'All'
+ let original = [...todos]
+
+ const setFilter = (filter)=> {
+  switch(filter){
+  case 'All':
+    todos = original
+    break
+  case 'Active':
+    todos = original.filter((todo)=>!todo.completed)
+    break
+  case 'Completed':
+    todos = original.filter((todo)=>todo.completed)
+    break
+  }
+ }
+
+//  clear les completed
+ const clearFunction = ()=> {
+  todos = todos.filter((todo)=> !todo.completed)
+ }
 </script>
 
 <main>
@@ -56,13 +90,9 @@
     </ul>
 
     <div class="actions">
-      <span class="todo-count">0 left</span>
-      <div class="filters">
-        <button class="filter">All</button>
-        <button class="filter">Active</button>
-        <button class="filter">Completed</button>
-      </div>
-      <button class="clear-completed">Clear completed</button>
+      <TodosLeft {numbersOfTodosLeft}/>
+      <Filters {selectedFilter} {setFilter}/>
+      <Clear {clearFunction}/>
     </div>
   </section>
 </main>
@@ -114,29 +144,5 @@
       0 16px 0 -6px hsl(0, 0%, 96%),
       0 17px 2px -6px hsla(0, 0%, 0%, 0.2);
     z-index: -1;
-  }
-
-
-
-  /* Filters */
-
-  .filters {
-    display: flex;
-    gap: var(--spacing-4);
-  }
-
-  .filter {
-    text-transform: capitalize;
-    padding: var(--spacing-4) var(--spacing-8);
-    border: 1px solid transparent;
-    border-radius: var(--radius-base);
-  }
-
-  .filter:hover {
-    border: 1px solid var(--color-highlight);
-  }
-
-  .selected {
-    border-color: var(--color-highlight);
   }
 </style>

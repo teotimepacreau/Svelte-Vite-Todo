@@ -21,8 +21,6 @@
     <span class:completed={todo.completed}>{todo.text}</span>
     <button on:click={()=> removeTodo(todo.id)} aria-label="Remove todo" class="remove" />
   </div>
-
-  <!-- <input class="edit" type="text" autofocus /> -->
 </li>
 
 <style>
